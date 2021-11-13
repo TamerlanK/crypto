@@ -1,63 +1,109 @@
-alphabet = 'abcdefghijklmnopqrstuvxyz'
-# Elifbadaki herfleri 5-5 qruplasdirib table listine elave etmek
-table = []
-temp = []
-for i in alphabet:
-    temp.append(i)
-    if len(temp) == 5:
-        table.append(temp)
-        temp = []
-# [['a', 'b', 'c', 'd', 'e'], 0
-# ['f', 'g', 'h', 'i', 'j'], 1
-# ['k', 'l', 'm', 'n', 'o'], 2
-# ['p', 'q', 'r', 's', 't'], 3
-# ['u', 'v', 'x', 'y', 'z']] 4
-text = input('Shifrelenecek sozu daxil edin : ')
-# Eger uzunluq 2-ye tam bolunmurse sona 'x' elave etmek
-if len(text) % 2 != 0:
-    text += 'x'
-# Eger sozde bir cutlukde iki eyni herf olarsa aralarina 'x' elave etmek
-text_lst = list(text)
-for i in range(len(text_lst)):
-    if i + 1 <= len(text):
-        if i % 2 == 0 and text_lst[i] == text_lst[i+1]:
-            text_lst.insert(i+1,'x')
-# Sozdeki herflerin cedveldeki indexlerini almaq
-locs = []
-for i in text_lst:
-    for j in range(len(table)):
-        for k in range(len(table[0])):
-            if table[j][k] == i:
-                temp.append(j)
-                temp.append(k)
-                if len(temp) == 2:
-                    locs.append(temp)
-                    temp = []
-# Indexleri kodlashdirmaq ucun 2-2 qruplashdirmaq
-locs_gr = []
-for i in locs:
-    temp.append(i)
-    if len(temp) == 2:
-        locs_gr.append(temp)
-        temp = []
-locs_gr_main = locs_gr
-#playfair alqoritmi
-for i in range(len(locs_gr)):
-    #Eger iki herfin indexleri ferqlidirse onlari diaqonal uzre yerleni deyishmek
-    if locs_gr[i][0][0] != locs_gr[i][1][0] and locs_gr[i][0][1] != locs_gr[i][1][1]:
-        locs_gr[i][0][1], locs_gr[i][1][1] = locs_gr[i][1][1], locs_gr[i][0][1]
-    #Eger herfler eyni setirdedirse 1 saga surushdurmek
-    elif locs_gr[i][0][0] == locs_gr[i][1][0]:
-        locs_gr[i][0][1] = (locs_gr[i][0][1] + 1) % 5
-        locs_gr[i][1][1] = (locs_gr[i][1][1] + 1) % 5
-    #Eger herfler eyni sutundadirsa 1 ashagi surushdurmek
-    elif locs_gr[i][0][1] == locs_gr[i][1][1]:
-        locs_gr[i][0][0] = (locs_gr[i][0][0] + 1) % 5
-        locs_gr[i][1][0] = (locs_gr[i][1][0] + 1) % 5
-locs_swapped = locs_gr
-#Indexleri cedveldeki herflerle evez etmek
-cipher = ''
-for i in range(len(locs_gr)):
-    for j in range(len(locs_gr[0])):
-        cipher += table[locs_swapped[i][j][0]][locs_swapped[i][j][1]]
-print(cipher)
+def createTable():
+    alphabet = 'abcdefghijklmnopqrstuvxyz'
+    table = []
+    temp = []
+    for i in alphabet:
+        temp.append(i)
+        if len(temp) == 5:
+            table.append(temp)
+            temp = []
+    return table
+
+def modifyText(text):
+    if len(text) % 2 != 0:
+        text += 'x'
+    textList = list(text)
+    for i in range(len(textList)):
+        if i + 1 < len(textList):
+            if i % 2 == 0 and textList[i] == textList[i+1]:
+                textList.insert(i+1, 'x')
+    return textList
+
+def getLetterLocations(modifiedText, table):
+    text_lst = list(modifiedText)
+    temp = []
+    locs = []
+    for i in text_lst:
+        for j in range(len(table)):
+            for k in range(len(table[0])):
+                if table[j][k] == i:
+                    temp.append(j)
+                    temp.append(k)
+                    if len(temp) == 2:
+                        locs.append(temp)
+                        temp = []
+    return locs
+
+def groupLetterLocations(locs):
+    locs_groupped = []
+    temp = []
+    for i in locs:
+        temp.append(i)
+        if len(temp) == 2:
+            locs_groupped.append(temp)
+            temp = []
+    return locs_groupped
+
+def swapForEncryption(locs_gr):
+    for i in range(len(locs_gr)):
+        # Eger iki herfin indexleri ferqlidirse onlari diaqonal uzre yerlerini deyishmek
+        if locs_gr[i][0][0] != locs_gr[i][1][0] and locs_gr[i][0][1] != locs_gr[i][1][1]:
+            locs_gr[i][0][1], locs_gr[i][1][1] = locs_gr[i][1][1], locs_gr[i][0][1]
+        # Eger herfler eyni setirdedirse 1 saga surushdurmek
+        elif locs_gr[i][0][0] == locs_gr[i][1][0]:
+            locs_gr[i][0][1] = (locs_gr[i][0][1] + 1) % 5
+            locs_gr[i][1][1] = (locs_gr[i][1][1] + 1) % 5
+        # Eger herfler eyni sutundadirsa 1 ashagi surushdurmek
+        elif locs_gr[i][0][1] == locs_gr[i][1][1]:
+            locs_gr[i][0][0] = (locs_gr[i][0][0] + 1) % 5
+            locs_gr[i][1][0] = (locs_gr[i][1][0] + 1) % 5
+    locs_swapped = locs_gr
+    return locs_swapped
+
+def swapForDecryption(locs_gr):
+    for i in range(len(locs_gr)):
+        # Eger iki herfin indexleri ferqlidirse onlari diaqonal uzre yerlerini deyishmek
+        if locs_gr[i][0][0] != locs_gr[i][1][0] and locs_gr[i][0][1] != locs_gr[i][1][1]:
+            locs_gr[i][0][1], locs_gr[i][1][1] = locs_gr[i][1][1], locs_gr[i][0][1]
+        # Eger herfler eyni setirdedirse 1 sola surushdurmek
+        elif locs_gr[i][0][0] == locs_gr[i][1][0]:
+            locs_gr[i][0][1] = (locs_gr[i][0][1] - 1) % 5
+            locs_gr[i][1][1] = (locs_gr[i][1][1] - 1) % 5
+        # Eger herfler eyni sutundadirsa 1 sola surushdurmek
+        elif locs_gr[i][0][1] == locs_gr[i][1][1]:
+            locs_gr[i][0][0] = (locs_gr[i][0][0] - 1) % 5
+            locs_gr[i][1][0] = (locs_gr[i][1][0] - 1) % 5
+    locs_swapped = locs_gr
+    return locs_swapped
+
+def locationsToLetters(locs_swapped, table):
+    cipher = ''
+    for i in range(len(locs_swapped)):
+        for j in range(len(locs_swapped[0])):
+            cipher += table[locs_swapped[i][j][0]][locs_swapped[i][j][1]]
+    return cipher
+
+table = createTable()
+option = int(input("""1.Shifrelemek : 
+2.Deshifrelemek : """))
+if option == 1:
+    text = input("Shifrelenecek metn : ")
+    modifiedText = modifyText(text)
+    locationsBefore = getLetterLocations(modifiedText, table)
+    locationsGroupped = groupLetterLocations(locationsBefore)
+    locationsSwapped = swapForEncryption(locationsGroupped)
+    cipher = locationsToLetters(locationsSwapped, table)
+    print(cipher)
+elif option == 2:
+    cipher = input("Deshifrelenecek metn : ")
+    locationsBefore = getLetterLocations(cipher, table)
+    locationsGroupped = groupLetterLocations(locationsBefore)
+    locationsSwapped = swapForDecryption(locationsGroupped)
+    plaintext = locationsToLetters(locationsSwapped, table)
+    print(plaintext)
+
+
+
+
+
+
