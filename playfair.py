@@ -46,14 +46,11 @@ def groupLetterLocations(locs):
 
 def swapForEncryption(locs_gr):
     for i in range(len(locs_gr)):
-        # Eger iki herfin indexleri ferqlidirse onlari diaqonal uzre yerlerini deyishmek
         if locs_gr[i][0][0] != locs_gr[i][1][0] and locs_gr[i][0][1] != locs_gr[i][1][1]:
             locs_gr[i][0][1], locs_gr[i][1][1] = locs_gr[i][1][1], locs_gr[i][0][1]
-        # Eger herfler eyni setirdedirse 1 saga surushdurmek
         elif locs_gr[i][0][0] == locs_gr[i][1][0]:
             locs_gr[i][0][1] = (locs_gr[i][0][1] + 1) % 5
             locs_gr[i][1][1] = (locs_gr[i][1][1] + 1) % 5
-        # Eger herfler eyni sutundadirsa 1 ashagi surushdurmek
         elif locs_gr[i][0][1] == locs_gr[i][1][1]:
             locs_gr[i][0][0] = (locs_gr[i][0][0] + 1) % 5
             locs_gr[i][1][0] = (locs_gr[i][1][0] + 1) % 5
@@ -62,14 +59,11 @@ def swapForEncryption(locs_gr):
 
 def swapForDecryption(locs_gr):
     for i in range(len(locs_gr)):
-        # Eger iki herfin indexleri ferqlidirse onlari diaqonal uzre yerlerini deyishmek
         if locs_gr[i][0][0] != locs_gr[i][1][0] and locs_gr[i][0][1] != locs_gr[i][1][1]:
             locs_gr[i][0][1], locs_gr[i][1][1] = locs_gr[i][1][1], locs_gr[i][0][1]
-        # Eger herfler eyni setirdedirse 1 sola surushdurmek
         elif locs_gr[i][0][0] == locs_gr[i][1][0]:
             locs_gr[i][0][1] = (locs_gr[i][0][1] - 1) % 5
             locs_gr[i][1][1] = (locs_gr[i][1][1] - 1) % 5
-        # Eger herfler eyni sutundadirsa 1 sola surushdurmek
         elif locs_gr[i][0][1] == locs_gr[i][1][1]:
             locs_gr[i][0][0] = (locs_gr[i][0][0] - 1) % 5
             locs_gr[i][1][0] = (locs_gr[i][1][0] - 1) % 5
