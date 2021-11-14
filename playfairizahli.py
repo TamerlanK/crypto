@@ -3,12 +3,15 @@ def createTableByKeyword(tableKey):
     alphabet = 'abcdefghijklmnopqrstuvxyz'
     table = []
     temp = []
+    #Istifadechini daxil etdiyi sozu herfler tekrarlanmamaq shertile bir liste yigmaq
     for i in tableKey:
         if i not in table:
             table.append(i)
+    #Elifbadan istifadechinin daxil etdiyi sozde olmayan herfleri sira ile hemin liste elave etmek
     for i in alphabet:
         if i not in table:
             table.append(i)
+    #Son alinmish listi 5-5 qruplashdirmaq
     tableFull = []
     for i in table:
         temp.append(i)
@@ -17,7 +20,7 @@ def createTableByKeyword(tableKey):
             temp = []
     return tableFull
 
-#Playfair cedvelini yaratmaq
+#Playfair ucun default cedvel yaratmaq
 def createTable():
     # elifbada w herfi yoxdur
     alphabet = 'abcdefghijklmnopqrstuvxyz' #Cedvel bu stringe gore yaradilir
