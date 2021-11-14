@@ -3,7 +3,7 @@ def createTableByKeyword(tableKey):
     alphabet = 'abcdefghijklmnopqrstuvxyz'
     table = []
     temp = []
-    #Istifadechini daxil etdiyi sozu herfler tekrarlanmamaq shertile bir liste yigmaq
+    #Istifadechini daxil etdiyi sozdeki herfleri herfler tekrarlanmamaq shertile bir liste yigmaq
     for i in tableKey:
         if i not in table:
             table.append(i)
