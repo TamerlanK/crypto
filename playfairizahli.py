@@ -168,28 +168,35 @@ def locationsToLetters(locs_swapped, table):
             cipher += table[locs_swapped[i][j][0]][locs_swapped[i][j][1]]
     return cipher
 
-#Daha sonrasi asandi
-table = createTable()
-customTable = input('Cedvel ucun achar soz daxil edilsin? (yes/no) ?\n')
-if customTable == 'yes':
-    keyword = input('Achar sozu daxil edin : ')
-    table = createTableByKeyword(keyword)
-option = int(input("""1.Shifrelemek : 
-2.Deshifrelemek : """))
-if option == 1:
-    text = input("Shifrelenecek metn : ")
-    modifiedText = modifyText(text)
-    locationsBefore = getLetterLocations(modifiedText, table)
+def playfairEncryption(plaintext, table):
+    locationsBefore = getLetterLocations(plaintext, table)
     locationsGroupped = groupLetterLocations(locationsBefore)
     locationsSwapped = swapForEncryption(locationsGroupped)
     cipher = locationsToLetters(locationsSwapped, table)
-    print(cipher)
-elif option == 2:
-    cipher = input("Deshifrelenecek metn : ")
+    return cipher
+
+def playfairDecrpytion(cipher, table):
     locationsBefore = getLetterLocations(cipher, table)
     locationsGroupped = groupLetterLocations(locationsBefore)
     locationsSwapped = swapForDecryption(locationsGroupped)
     plaintext = locationsToLetters(locationsSwapped, table)
+    return plaintext
+
+table = createTable()
+tableKeySelection = input('Cedvel ucun achar soz daxil edilsin?(yes/no) : ')
+if tableKeySelection.lower() == 'yes':
+    tableKey = input('Achar sozu daxil edin : ')
+    table = createTableByKeyword(tableKey)
+option = int(input("""1.Shifrelemek : 
+2.Deshifrelemek : \n"""))
+if option == 1:
+    text = input("Shifrelenecek metn : ")
+    modifiedText = modifyText(text)
+    cipher = playfairEncryption(modifiedText, table)
+    print(cipher)
+elif option == 2:
+    cipher = input("Deshifrelenecek metn : ")
+    plaintext = playfairDecrpytion(cipher, table)
     print(plaintext)
 
 
