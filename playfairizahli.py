@@ -1,7 +1,26 @@
+# Isteye gore istifadeciden alinan acar soze gore cedvel qurmaq
+def createTableByKeyword(tableKey):
+    alphabet = 'abcdefghijklmnopqrstuvxyz'
+    table = []
+    temp = []
+    for i in tableKey:
+        if i not in table:
+            table.append(i)
+    for i in alphabet:
+        if i not in table:
+            table.append(i)
+    tableFull = []
+    for i in table:
+        temp.append(i)
+        if len(temp) == 5:
+            tableFull.append(temp)
+            temp = []
+    return tableFull
+
 #Playfair cedvelini yaratmaq
 def createTable():
     # elifbada w herfi yoxdur
-    alphabet = 'abcdefghijklmnopqrstuvxyz'
+    alphabet = 'abcdefghijklmnopqrstuvxyz' #Cedvel bu stringe gore yaradilir
     table = []
     temp = []
     #Elifbadaki herfler muveqqeti bir temp listine elave olunur ve uzunlugu 5 olduqda 'table' listine elave olunur
@@ -78,7 +97,7 @@ def groupLetterLocations(locs):
 #  3 ['p', 'q', 'r', 's', 't'],
 #  4 ['u', 'v', 'x', 'y', 'z']]
 
-#Playfairde eger herfler eyni setir ve yaxudda sutunda deyildilerse duzbucaqli yaradilirdi ve sagdaki herf sola, soldaki
+#Playfairde eger herfler eyni setir ve yaxudda sutunda deyildilerse duzbucaq yaradilirdi ve sagdaki herf sola, soldaki
 #herf ise saga kecirdi. Yeni meselen 'ta-me-rl-an' sozunu kodlashirdanda evvelce 'ta' cutluyu goturulur
 #t herfinin indexi cedvelde [3][4], a herfininki ise [0][0] dir.
 #Kodlashdirmaq ucun 't' nin yerine 'p', 'a' nin yerine ise 'e' yazmaq lazimdir
@@ -96,11 +115,11 @@ def swapForEncryption(locs_gr):
     #2ci ve 3cu indexler ise sira ile cutlukdeki 1ci ve ya 2ci herfi(indeksle 0 1), 3cu indeks ise herfin cedveleki
     #koordinatlarini gosterir(yeni 0 olduqda [x][y] x indexini, 1 olduqda ise y indexini gosterir.
     for i in range(len(locs_gr)):
-        # Eger iki herfin indexleri ferqlidirse onlari diaqonal uzre yerlerini deyishmek
+        # Eger iki herfin setir ve sutun indexleri ferqlidirse onlari diaqonal uzre yerlerini deyishmek
         if locs_gr[i][0][0] != locs_gr[i][1][0] and locs_gr[i][0][1] != locs_gr[i][1][1]:
             #Burda ise [0][1] yeni cutlukdeki ilk herfin ikinci indexi
             # [1][1] ile yeni ikinci herfin ikinci indexi ile deyishdirilir
-            #Basha dushmedinse 85-ci line yeniden oxu
+            #Basha dushmedinse 105-ci line yeniden oxu
             locs_gr[i][0][1], locs_gr[i][1][1] = locs_gr[i][1][1], locs_gr[i][0][1]
         # Eger herfler eyni setirdedirse 1 saga surushdurmek
         # Herflerin eyni setirde olmasi demek onlarin birinci indexlerinin eyni olmasi demekdir
@@ -148,6 +167,10 @@ def locationsToLetters(locs_swapped, table):
 
 #Daha sonrasi asandi
 table = createTable()
+customTable = input('Cedvel ucun achar soz daxil edilsin? (yes/no) ?\n')
+if customTable == 'yes':
+    keyword = input('Achar sozu daxil edin : ')
+    table = createTableByKeyword(keyword)
 option = int(input("""1.Shifrelemek : 
 2.Deshifrelemek : """))
 if option == 1:
