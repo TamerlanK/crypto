@@ -1,4 +1,4 @@
-def createTableByKeyword(tableKey):
+def createTable(tableKey):
     alphabet = 'abcdefghijklmnopqrstuvxyz'
     table = []
     temp = []
@@ -8,36 +8,24 @@ def createTableByKeyword(tableKey):
     for i in alphabet:
         if i not in table:
             table.append(i)
-    tableFull = []
+    tableGrouped = []
     for i in table:
         temp.append(i)
         if len(temp) == 5:
-            tableFull.append(temp)
+            tableGrouped.append(temp)
             temp = []
-    return tableFull
-
-
-def createTable():
-    alphabet = 'abcdefghijklmnopqrstuvxyz'
-    table = []
-    temp = []
-    for i in alphabet:
-        temp.append(i)
-        if len(temp) == 5:
-            table.append(temp)
-            temp = []
-    return table
-
+    return tableGrouped
 
 def modifyText(text):
-    if len(text) % 2 != 0:
-        text += 'x'
     textList = list(text)
     for i in range(len(textList)):
-        if i + 1 < len(textList):
+        if len(textList) % 2 != 0:
+            textList.append('x')
+        if i + 1 <= len(textList):
             if i % 2 == 0 and textList[i] == textList[i + 1]:
                 textList.insert(i + 1, 'x')
-    return textList
+    textListString = "".join(textList)
+    return textListString
 
 
 def getLetterLocations(modifiedText, table):
@@ -102,34 +90,45 @@ def locationsToLetters(locs_swapped, table):
     return cipher
 
 
-def playfairEncryption(plaintext, table):
+
+def playfairEncryption(plaintext, table, uppercases):
     locationsBefore = getLetterLocations(plaintext, table)
     locationsGroupped = groupLetterLocations(locationsBefore)
     locationsSwapped = swapForEncryption(locationsGroupped)
     cipher = locationsToLetters(locationsSwapped, table)
+    cipher = changeCases(cipher, uppercases)
     return cipher
 
-
-def playfairDecrpytion(cipher, table):
+def playfairDecrpytion(cipher, table, uppercases):
     locationsBefore = getLetterLocations(cipher, table)
     locationsGroupped = groupLetterLocations(locationsBefore)
     locationsSwapped = swapForDecryption(locationsGroupped)
     plaintext = locationsToLetters(locationsSwapped, table)
+    plaintext = changeCases(plaintext, uppercases)
     return plaintext
 
-table = createTable()
+def changeCases(cipher, uppercases):
+    cipher = list(cipher)
+    for i in uppercases:
+        cipher[i] = cipher[i].upper()
+    return "".join(cipher)
+
+def getUpperCases(text):
+    return [i for i in range(len(text)) if text[i].isupper()]
+
+table = createTable('')
 tableKeySelection = input('Cedvel ucun achar soz daxil edilsin?(yes/no) : ')
 if tableKeySelection.lower() == 'yes':
     tableKey = input('Achar sozu daxil edin : ')
-    table = createTableByKeyword(tableKey)
+    table = createTable(tableKey)
 option = int(input("""1.Shifrelemek : 
 2.Deshifrelemek : \n"""))
 if option == 1:
     text = input("Shifrelenecek metn : ")
     modifiedText = modifyText(text)
-    cipher = playfairEncryption(modifiedText, table)
+    cipher = playfairEncryption(modifiedText.lower(), table, getUpperCases(modifiedText))
     print(cipher)
 elif option == 2:
     cipher = input("Deshifrelenecek metn : ")
-    plaintext = playfairDecrpytion(cipher, table)
+    plaintext = playfairDecrpytion(cipher.lower(), table, getUpperCases(cipher))
     print(plaintext)
