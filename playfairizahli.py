@@ -1,5 +1,6 @@
-# Isteye gore istifadeciden alinan acar soze gore cedvel qurmaq
-def createTableByKeyword(tableKey):
+# Playfair cedvelini qurmaq
+def createTable(tableKey):
+    #Elifbada 'w' yoxdu
     alphabet = 'abcdefghijklmnopqrstuvxyz'
     table = []
     temp = []
@@ -20,50 +21,33 @@ def createTableByKeyword(tableKey):
             temp = []
     return tableFull
 
-#Playfair ucun default cedvel yaratmaq
-def createTable():
-    # elifbada w herfi yoxdur
-    alphabet = 'abcdefghijklmnopqrstuvxyz' #Cedvel bu stringe gore yaradilir
-    table = []
-    temp = []
-    #Elifbadaki herfler muveqqeti bir temp listine elave olunur ve uzunlugu 5 olduqda 'table' listine elave olunur
-    #ve temp listi her defe sifirlanir
-    #Sonda ise [5][5] olcusunde 'table' ikiolculu listi, arrayi yaranir
-    for i in alphabet:
-        temp.append(i)
-        if len(temp) == 5:
-            table.append(temp)
-            temp = []
-    return table
 
-#Istifadeciden alinan sozu kodlasdirmaya hazir hala getirmek
+#Istifadeciden alinan sozu kodlasdirmaya hazir hala getirmek (sozun sonuna, eyni herf yanashi olarsa
+# aralarina 'x' elave etmek kimi)
 def modifyText(text):
-    #Eger soz 2-2 tam bolunmurse sona 'x' elave etmek
-    if len(text) % 2 != 0:
-        text += 'x'
-    #Burada ise soz 2-2 bolunende eger bir cutluye 2 eyni herf dushurse aralarina 'x' elave edilir
-
-    #Istifadeciden alinan metn string tipinde olduguna gore ve pythonda stringler immutable yeni deyishmez oldugu ucun
-    #o liste cevirilmelidir ki araya herf elave ede bilek
+    #Pythonda stringler immutable(deyishmez) oldugundan araya herf elave etmek ucun onu liste cevirmek lazimdir
     textList = list(text)
-    #Listin uzunlugu boyunca dovr edilir
     for i in range(len(textList)):
-        #Sozun uzunlugunu ashmamaq ucun i + 1 < len(textList) sherti yoxlanir
-        if i + 1 < len(textList):
-            #Soz 2-2 bolunduke eger herfler bir cutluk icinde olarsa aralarina 'x' herfi elave edilir
-            #ve her cutluyun bashladigi indexler cut olur meselen 'ta-me-rl-an' t indexi 0, m indexi 2 ve s
-            #buna gore indexin cut ededden bashladigi ve bashlanan indexdeki ededleri sonraki ededin eyni olmasi yoxlanilir
-            #Eger hal dogrudursa insert metodu ile i + 1 - ci yeni iki qosha herfin arasina 'x' elave olunur
-            if i % 2 == 0 and textList[i] == textList[i+1]:
-                textList.insert(i+1, 'x')
-    return textList
+        # Sozun uzunlugu 2-ye tam bolunmurse sonuna 'x' elave etmek
+        if len(textList) % 2 != 0:
+            textList.append('x')
+        #Soz 2-2 bolundukde bir cutlukde eyni herfler olarsa aralarina 'x' elave etmek
+        if i + 1 <= len(textList):
+            # Bir cutluyun ilk herfinin indexi cut ededden bashladigi ucun i-nin cutluyunu yoxlamaq lazimdir
+            if i % 2 == 0 and textList[i] == textList[i + 1]:
+                textList.insert(i + 1, 'x')
+    #Son listi stringe cevirib qaytarmaq
+    textListString = "".join(textList)
+    return textListString
+
+
 #Kodlashdirmaga hazir sozdeki herflerin 'table' cedvelindeki indexlerini almaq
 def getLetterLocations(modifiedText, table):
     temp = []
     locs = []
-    #Sozdeki herfler uzerinde loop edilir
+    #Sozdeki herfler boyunca dovr
     for i in modifiedText:
-        #Burada ise cedvel ikiolculu list(array) olduguna gore iki defe for loopu qurulur
+        # Playfair cedveli ikioluculu oldugundan 2 defe cedvel ucun dovr edilir
         for j in range(len(table)): # j cedvelin 5 elementini
             for k in range(len(table[0])): # k ise her element icindeki 5 herfi gosterir
                 #Eger cedvelin her hansi elementi i'ye yeni sozdeki herfe beraberdise hemin indexleri muveqqeti bir
@@ -80,12 +64,12 @@ def getLetterLocations(modifiedText, table):
     #alinir ve bu defe her herfin yerine onlarin cedveldeki indexlerini gosteren locs listi yaranir
     return locs
 
-#Burada ise sozu 2-2 kodlashdiracayiq deye locationlar listi bir daha 2-2 qruplashdirilir vee 3 olculu list yaranir
-#Biraz cetin geldi he :D
+#Burada ise sozu 2-2 kodlashdiracayiq deye locationlar listi bir daha 2-2 qruplashdirilir vee 3 olculu list yaranir :/
+
 def groupLetterLocations(locs):
     locs_groupped = []
     temp = []
-    #Burda cox shey yoxdu hemenki tema
+    #Burda cox shey yoxdu hemenki sheyler
     for i in locs:
         temp.append(i)
         if len(temp) == 2:
@@ -122,7 +106,7 @@ def swapForEncryption(locs_gr):
         if locs_gr[i][0][0] != locs_gr[i][1][0] and locs_gr[i][0][1] != locs_gr[i][1][1]:
             #Burda ise [0][1] yeni cutlukdeki ilk herfin ikinci indexi
             # [1][1] ile yeni ikinci herfin ikinci indexi ile deyishdirilir
-            #Basha dushmedinse 105-ci line yeniden oxu
+            #Basha dushmedinse 91-ci line yeniden oxu
             locs_gr[i][0][1], locs_gr[i][1][1] = locs_gr[i][1][1], locs_gr[i][0][1]
         # Eger herfler eyni setirdedirse 1 saga surushdurmek
         # Herflerin eyni setirde olmasi demek onlarin birinci indexlerinin eyni olmasi demekdir
@@ -168,35 +152,51 @@ def locationsToLetters(locs_swapped, table):
             cipher += table[locs_swapped[i][j][0]][locs_swapped[i][j][1]]
     return cipher
 
-def playfairEncryption(plaintext, table):
+def playfairEncryption(plaintext, table, uppercases):
     locationsBefore = getLetterLocations(plaintext, table)
     locationsGroupped = groupLetterLocations(locationsBefore)
     locationsSwapped = swapForEncryption(locationsGroupped)
     cipher = locationsToLetters(locationsSwapped, table)
+    cipher = changeCases(cipher, uppercases)
     return cipher
 
-def playfairDecrpytion(cipher, table):
+def playfairDecrpytion(cipher, table, uppercases):
     locationsBefore = getLetterLocations(cipher, table)
     locationsGroupped = groupLetterLocations(locationsBefore)
     locationsSwapped = swapForDecryption(locationsGroupped)
     plaintext = locationsToLetters(locationsSwapped, table)
+    plaintext = changeCases(plaintext, uppercases)
     return plaintext
 
-table = createTable()
+# Bu funksiya ise daxil edilen sozdeki boyuk herflerin indexlerinden ibaret bir list ve sifrelenmish metni goturub
+# Sifredeki uygun indexleri boyuk herfe cevirir
+def changeCases(cipher, uppercases):
+    cipher = list(cipher)
+    for i in uppercases:
+        cipher[i] = cipher[i].upper()
+    return "".join(cipher)
+
+# Sozden boyuk heflerin indexini almaq ucun funksiya
+def getUpperCases(text):
+    return [i for i in range(len(text)) if text[i].isupper()]
+
+#Istifadeci achar soz daxil etmek istemezde yaradilacaq 'default' cedvel
+table = createTable('')
+# Sonrasi asandi :) Funksiyalari basa dushmusense besdi
 tableKeySelection = input('Cedvel ucun achar soz daxil edilsin?(yes/no) : ')
 if tableKeySelection.lower() == 'yes':
     tableKey = input('Achar sozu daxil edin : ')
-    table = createTableByKeyword(tableKey)
+    table = createTable(tableKey)
 option = int(input("""1.Shifrelemek : 
 2.Deshifrelemek : \n"""))
 if option == 1:
     text = input("Shifrelenecek metn : ")
     modifiedText = modifyText(text)
-    cipher = playfairEncryption(modifiedText, table)
+    cipher = playfairEncryption(modifiedText.lower(), table, getUpperCases(modifiedText))
     print(cipher)
 elif option == 2:
     cipher = input("Deshifrelenecek metn : ")
-    plaintext = playfairDecrpytion(cipher, table)
+    plaintext = playfairDecrpytion(cipher.lower(), table, getUpperCases(cipher))
     print(plaintext)
 
 
