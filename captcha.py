@@ -19,26 +19,18 @@ def create():
     fonts = ['Verdana', 'Times', 'Arial', 'Papyrus', 'Console', 'Courier', 'Roman', 'Bahnschrift', 'Dubai']
     captcha = "".join(symbols)
     print(captcha)
-    canvas.create_text(50 + r.randint(0, 20), 80 + r.randint(0, 20), text=symbols[0], font=r.choice(fonts) + ' 28 bold',
-                       fill=r.choice(colors))
-    canvas.create_text(90 + r.randint(0, 20), 80 + r.randint(0, 20), text=symbols[1], font=r.choice(fonts) + ' 28 bold',
-                       fill=r.choice(colors))
-    canvas.create_text(130 + r.randint(0, 20), 80 + r.randint(0, 20), text=symbols[2],
-                       font=r.choice(fonts) + ' 28 bold',
-                       fill=r.choice(colors))
-    canvas.create_text(170 + r.randint(0, 20), 80 + r.randint(0, 20), text=symbols[3],
-                       font=r.choice(fonts) + ' 28 bold',
-                       fill=r.choice(colors))
-    canvas.create_text(210 + r.randint(0, 20), 80 + r.randint(0, 20), text=symbols[4],
-                       font=r.choice(fonts) + ' 28 bold',
-                       fill=r.choice(colors))
+    for i in range(5):
+        canvas.create_text(40 + i*(r.randrange(40,50)) + r.randint(0, 20), 80 + r.randint(0, 20), text=symbols[i],
+                           font=r.choice(fonts) + ' 28 bold',
+                           fill=r.choice(colors))
+
     for i in range(5):
         canvas.create_line(r.randrange(10, 280), r.randrange(10, 150), r.randrange(10, 280), r.randrange(10, 150),
                            fill=r.choice(colors), width=r.randint(0, 4))
     radius = r.randrange(5, 20)
     for i in range(5):
         canvas.create_oval((x0 := r.randrange(10, 280)), (y0 := r.randrange(10, 140)), x0 + radius,
-                           y0 + radius, fill=r.choice([None,(clr:=r.choice(colors))]), outline=clr)
+                           y0 + radius, fill=r.choice([None, (clr := r.choice(colors))]), outline=clr)
     return captcha
 
 
@@ -48,7 +40,7 @@ def submit():
     canvas.delete('all')
     if captcha == userinput:
         print('Verified')
-        canvas.create_text(150,75,text='Verified',fill='green',font='Verdana 20 bold')
+        canvas.create_text(150, 75, text='Verified', fill='green', font='Verdana 20 bold')
     elif captcha != userinput:
         print('Not verified')
         canvas.create_text(150, 75, text='Not Verified', fill='red', font='Verdana 20 bold')
