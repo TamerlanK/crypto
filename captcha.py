@@ -15,12 +15,12 @@ def create():
     e.delete(0, END)
     alphabet = string.ascii_letters + string.digits
     symbols = r.sample(alphabet, 5)
-    colors = ['red', 'blue', 'green', 'black', 'orange', 'purple', 'brown']
+    colors = ['red', 'blue', 'green', 'black', 'orange', 'purple', 'brown', 'magenta', 'cyan']
     fonts = ['Verdana', 'Times', 'Arial', 'Papyrus', 'Console', 'Courier', 'Roman', 'Bahnschrift', 'Dubai']
     captcha = "".join(symbols)
     print(captcha)
     for i in range(5):
-        canvas.create_text(40 + i*(r.randrange(40,50)) + r.randint(0, 20), 80 + r.randint(0, 20), text=symbols[i],
+        canvas.create_text((40 + i * 40) + r.randint(0, 20), 80 + r.randint(0, 20), text=symbols[i],
                            font=r.choice(fonts) + ' 28 bold',
                            fill=r.choice(colors))
 
