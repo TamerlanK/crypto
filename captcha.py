@@ -20,7 +20,7 @@ def create():
     captcha = "".join(symbols)
     print(captcha)
     for i in range(5):
-        canvas.create_text((40 + i * 40) + r.randint(0, 20), 80 + r.randint(0, 20), text=symbols[i],
+        canvas.create_text((50 + i * 40) + r.randint(0, 20), 80 + r.randint(0, 20), text=symbols[i],
                            font=r.choice(fonts) + ' 28 bold',
                            fill=r.choice(colors))
 
